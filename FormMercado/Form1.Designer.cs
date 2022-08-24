@@ -52,6 +52,7 @@
             this.btn_cancelar = new System.Windows.Forms.Button();
             this.btn_nova_venda = new System.Windows.Forms.Button();
             this.btn_fechar = new System.Windows.Forms.Button();
+            this.col_total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_venda)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,7 +167,8 @@
             this.dgv_venda.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.col_desc,
             this.col_qntd,
-            this.col_valor_unit});
+            this.col_valor_unit,
+            this.col_total});
             this.dgv_venda.Location = new System.Drawing.Point(44, 186);
             this.dgv_venda.Name = "dgv_venda";
             this.dgv_venda.ReadOnly = true;
@@ -301,6 +303,13 @@
             this.btn_fechar.UseVisualStyleBackColor = true;
             this.btn_fechar.Click += new System.EventHandler(this.btn_fechar_Click);
             // 
+            // col_total
+            // 
+            this.col_total.HeaderText = "Total Produto";
+            this.col_total.Name = "col_total";
+            this.col_total.ReadOnly = true;
+            this.col_total.Width = 96;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,6 +370,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_qntd;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_valor_unit;
         private System.Windows.Forms.Label lbl_total;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_total;
     }
 }
 

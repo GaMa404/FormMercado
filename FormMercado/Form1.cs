@@ -15,6 +15,7 @@ namespace FormMercado
         int id_venda = 1;
         int qntd;
         double valor_unit;
+        double total_produto;
         double total;
 
         public Form1()
@@ -27,12 +28,15 @@ namespace FormMercado
             qntd = int.Parse(txt_qntd.Text);
             valor_unit = double.Parse(txt_valor_unit.Text);
 
-            total += qntd * valor_unit;
+            total_produto = qntd * valor_unit;
+            total += total_produto;
 
             lbl_total.Text = total.ToString("C");
 
-            dgv_venda.Rows.Add(txt_descricao.Text, txt_qntd.Text, txt_valor_unit.Text);
+            dgv_venda.Rows.Add(txt_descricao.Text, txt_qntd.Text, txt_valor_unit.Text, total_produto.ToString());
 
+            qntd = 0;
+            valor_unit = 0;
             txt_descricao.Clear();
             txt_qntd.Clear();
             txt_valor_unit.Clear();
@@ -47,11 +51,17 @@ namespace FormMercado
         {
             if(dgv_venda.RowCount > 0)
             {
+                ValorCurrentCell();
+
+                total -= total_produto;
+
+                lbl_total.Text = total.ToString("C");
+
                 dgv_venda.Rows.RemoveAt(dgv_venda.CurrentCell.RowIndex);
                 MessageBox.Show("Venda removida", "Remover",
                                  MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
-                lbl_item.Text = dgv_venda.RowCount.ToString();
+                lbl_item.Text = dgv_venda.RowCount.ToString();          
             }
         }
 
@@ -74,32 +84,39 @@ namespace FormMercado
         {
             if(txt_qntd_item.Text != "")
             {
+                ValorCurrentCell();
 
-                txt_qntd.Text = dgv_venda.CurrentRow.Cells["col_qntd"].Value.ToString();
-                qntd = int.Parse(txt_qntd.Text);
+                total -= total_produto;
 
-                txt_valor_unit.Text = dgv_venda.CurrentRow.Cells["col_valor_unit"].Value.ToString();
-                valor_unit = double.Parse(txt_qntd.Text);
-
-                total -= qntd * valor_unit;
                 dgv_venda.CurrentRow.Cells["col_qntd"].Value = txt_qntd_item.Text;
+
+                ValorCurrentCell();
+
+                total += total_produto;
+
+                dgv_venda.CurrentRow.Cells["col_total"].Value = total_produto.ToString();
+                lbl_total.Text = total.ToString("C");
+
+                txt_qntd_item.Clear();
 
                 MessageBox.Show("Quantidade alterada", "Alterar",
                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-
-            txt_qntd.Text = dgv_venda.CurrentRow.Cells["col_qntd"].Value.ToString();
-            qntd = int.Parse(txt_qntd.Text);
-
-            txt_valor_unit.Text = dgv_venda.CurrentRow.Cells["col_valor_unit"].Value.ToString();
-            valor_unit = double.Parse(txt_valor_unit.Text);
-
-            total += qntd * valor_unit;
-            lbl_total.Text = total.ToString("C");
         }
 
         private void btn_cancelar_Click(object sender, EventArgs e)
         {
+            if (id_venda != 1)
+            {
+                id_venda -= 1;
+            }
+            else
+            {
+                id_venda = 1;
+            }
+
+            txt_venda.Text = id_venda.ToString();
+
             Limpar();
         }
 
@@ -112,10 +129,24 @@ namespace FormMercado
             txt_descricao.Clear();
             txt_qntd.Clear();
             txt_valor_unit.Clear();
+            qntd = 0;
+            valor_unit = 0;
+            total_produto = 0;
             total = 0;
             lbl_total.Text = "R$ 0,00";
+            txt_qntd_item.Clear();
         }
 
+        void ValorCurrentCell()
+        {
+            qntd = Convert.ToInt16(dgv_venda.CurrentRow.Cells["col_qntd"].Value);
+            // qntd = int.Parse(txt_qntd.Text);
+
+            valor_unit = Convert.ToDouble(dgv_venda.CurrentRow.Cells["col_valor_unit"].Value);
+            // valor_unit = double.Parse(txt_valor_unit.Text);
+
+            total_produto = qntd * valor_unit;
+        }
 
         private void btn_fechar_Click(object sender, EventArgs e)
         {
